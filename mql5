@@ -1,0 +1,46 @@
+
+//+------------------------------------------------------------------+
+//|                                           PacMac Scalper FX.mq5 |
+//|                          Copyright 2022, Forex Robot Easy Team   |
+//|                                      https://www.forexroboteasy.com |
+//+------------------------------------------------------------------+
+
+// Define input parameters
+input double StopLoss = 50; // Stop loss level in pips
+input double TakeProfit = 100; // Take profit level in pips
+
+// Define trade execution function
+void Trade()
+{
+   // Check if there are any open positions
+   if (PositionsTotal() == 0)
+   {
+      // Calculate the current market price
+      double currentPrice = SymbolInfoDouble(_Symbol, SYMBOL_BID);
+      
+      // Calculate stop loss and take profit levels
+      double stopLossLevel = currentPrice - StopLoss * _Point;
+      double takeProfitLevel = currentPrice + TakeProfit * _Point;
+      
+      // Open a buy position
+      if (OrderSend(_Symbol, OP_BUY, 0.01, currentPrice, 0, stopLossLevel, takeProfitLevel) > 0)
+      {
+         Print('Buy order opened successfully');
+      }
+      else
+      {
+         Print('Failed to open buy order');
+      }
+   }
+   else
+   {
+      Print('There are already open positions');
+   }
+}
+
+// Start of the program
+void OnStart()
+{
+   // Call the trade execution function
+   Trade();
+}
